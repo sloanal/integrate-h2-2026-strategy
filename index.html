@@ -24,6 +24,7 @@
     --faint:#746A7D;         /* Subtle */
     --line:rgba(182,185,230,.14);      /* cornflower-tinted hairline */
     --violet:#8137D3;        /* bright hero purple for accents/glyphs */
+    --violet-lt:#9B5BF5;     /* one step up the purple ramp — small tracked labels on dark */
     --violet-deep:#7B25C6;   /* Purple — Hero, locked */
     --violet-glow:rgba(129,55,211,.45);
     --corn:#B6B9E6;          /* Cornflower — pairs with Purple */
@@ -117,13 +118,14 @@
   /* ---------- Layout primitives ---------- */
   section{position:relative;z-index:2;padding:clamp(84px,13vh,168px) clamp(20px,5vw,56px)}
   .wrap{max-width:var(--maxw);margin:0 auto;width:100%}
-  .eyebrow{font-family:var(--font-mono);font-size:clamp(10px,1vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--violet);
+  .eyebrow{font-family:var(--font-mono);font-size:clamp(10px,1vw,12px);letter-spacing:.36em;text-transform:uppercase;color:var(--violet-lt);
     display:inline-flex;align-items:center;gap:12px;margin-bottom:26px}
-  .eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--violet),transparent)}
+  .eyebrow::before{content:"";width:34px;height:1px;background:linear-gradient(90deg,var(--violet-lt),transparent)}
   h1,h2,h3{font-family:var(--font-display);font-weight:400;line-height:.98;letter-spacing:-.02em}
   .h-xl{font-size:clamp(44px,8.4vw,124px)}
   .h-lg{font-size:clamp(36px,6.2vw,84px);font-weight:400}
   .h-md{font-size:clamp(27px,3.8vw,50px);font-weight:400}
+  .h-sub{font-size:clamp(22px,2.8vw,34px);font-weight:400}
   .lede{font-size:clamp(17px,1.7vw,23px);color:#F2F0F7;max-width:60ch;font-weight:360}
   .blurb{font-size:clamp(14px,1.1vw,16px);color:#D8D4E2;max-width:56ch;font-weight:360}
   /* brighter body copy across the deck */
@@ -133,6 +135,7 @@
   .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;background-size:200% auto;animation:sheen 8s linear infinite}
   @keyframes sheen{to{background-position:200% center}}
   .divider{height:1px;background:var(--line);margin:0 auto;max-width:var(--maxw)}
+  .divider.sub{opacity:.4;max-width:calc(var(--maxw) - 100px)}
 
   /* reveal */
   .rv{opacity:0;transform:translateY(34px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
@@ -143,6 +146,14 @@
   /* ---------- Decode motion system ---------- */
   .decode.decoding{font-family:var(--font-mono)!important}
   .scr{color:#9A93A5;opacity:.4;font-family:var(--font-mono)}
+  /* word box pinned to its real width while its characters scramble — see freezeWords().
+     pre stops the noise from wrapping inside its own box and growing the line, and the
+     inherits keep bare-tag rules like `.feat span` off a box that is only scaffolding. */
+  .dcw{display:inline-block;white-space:pre;
+    font:inherit!important;color:inherit!important;letter-spacing:inherit!important;word-spacing:inherit!important;
+    text-transform:inherit!important;text-shadow:inherit!important;vertical-align:baseline!important;
+    background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+    padding:0!important;margin:0!important;opacity:1!important;transform:none!important;-webkit-text-fill-color:inherit}
   /* chromatic-aberration reveal for display headings */
   @keyframes caReveal{
     0%{text-shadow:-6px 0 rgba(129,55,211,.9),6px 0 rgba(50,172,249,.75);opacity:.2}
@@ -158,15 +169,15 @@
 
   /* ---------- Custom 3D initiative visuals ---------- */
   .viz-band{position:relative;margin:44px 0 8px;border:1px solid var(--line);border-radius:20px;overflow:hidden;
-    background:linear-gradient(180deg,rgba(24,7,38,.55),rgba(12,8,19,.25));min-height:clamp(300px,46vh,440px)}
+    background:linear-gradient(180deg,rgba(24,7,38,.55),rgba(12,8,19,.25));min-height:clamp(180px,27.6vh,264px)}
   .viz-band canvas{display:block;width:100%;height:100%;position:absolute;inset:0}
-  .viz-cap{position:absolute;left:0;bottom:0;right:0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    padding:18px 22px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--corn);
-    background:linear-gradient(0deg,rgba(10,6,16,.72),transparent);pointer-events:none}
-  .viz-cap b{color:var(--ink);font-weight:400}
   .viz-hint{position:absolute;top:16px;right:20px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--faint);pointer-events:none;display:flex;align-items:center;gap:7px}
   .viz-hint::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet-glow);animation:pulse 2s infinite}
+  .viz-cap{position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;
+    padding:16px 22px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.02em;color:var(--muted);
+    background:linear-gradient(0deg,rgba(10,6,16,.75),transparent)}
+  .viz-cap b{color:var(--ink);font-weight:400}
 
   /* ---------- HERO ---------- (Brand-Library shader-text treatment) */
   #hero{position:relative;min-height:100vh;overflow:hidden;z-index:2}
@@ -294,6 +305,20 @@
   .persona li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:8px;border-radius:2px;background:var(--faint)}
   .persona.new li::before{background:var(--violet);box-shadow:0 0 8px var(--violet-glow)}
   .persona-arrow{display:flex;align-items:center;justify-content:center;color:var(--violet);font-size:34px}
+  /* ---------- The report-up loop · the Conduit ⇄ Leader pair ---------- */
+  .persona.pair{border-color:rgba(155,91,245,.3);background:linear-gradient(180deg,rgba(155,91,245,.055),rgba(255,255,255,.008))}
+  .persona.pair.reads{border-color:rgba(155,91,245,.45);background:linear-gradient(180deg,rgba(155,91,245,.09),rgba(255,255,255,.01));box-shadow:0 0 60px -20px var(--violet-glow)}
+  .persona.pair .tier{color:var(--corn)}
+  .persona.pair li::before{background:var(--violet);box-shadow:0 0 8px var(--violet-glow)}
+  /* real-world examples footer inside a persona card */
+  .persona .ex{display:block;margin-top:22px;padding-top:15px;border-top:1px solid var(--line);
+    font-family:var(--font-mono);font-size:10.5px;line-height:1.9;letter-spacing:.06em;color:var(--faint)}
+  .persona .ex b{display:block;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--violet);font-weight:400;margin-bottom:7px}
+  /* arrow with a label under it — the glyph rotates on mobile, the words don't */
+  .persona-arrow.tagged{flex-direction:column;gap:12px;line-height:1}
+  .persona-arrow.tagged .arw-lbl{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--muted);text-align:center;max-width:13ch;line-height:1.65}
+  @media(max-width:900px){.persona-arrow.tagged{transform:none}.persona-arrow.tagged .arw{display:block;transform:rotate(90deg)}}
   .named{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:26px}
   @media(max-width:760px){.named{grid-template-columns:1fr}}
   .figure{border:1px solid var(--line);border-radius:16px;padding:26px;background:var(--bg-soft);display:flex;gap:20px;align-items:flex-start}
@@ -342,22 +367,29 @@
   .step.done .st{color:var(--violet)}.step.now .st{color:var(--violet)}
   .step p{font-size:13.5px;color:var(--muted);margin-top:4px}
 
-  /* feature list */
-  .feats{display:flex;flex-direction:column;gap:2px;margin-top:6px}
-  .feat{display:flex;gap:16px;padding:15px 4px;border-bottom:1px solid var(--line);align-items:baseline}
-  .feat b{font-family:var(--font-display);font-weight:400;font-size:clamp(16px,1.7vw,20px);flex:0 0 auto}
-  .feat span{font-size:13.5px;color:var(--muted)}
-  .feat .badge{margin-left:auto;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);border:1px solid rgba(155,91,245,.35);border-radius:100px;padding:3px 9px;white-space:nowrap;align-self:center}
-
-  /* Rail three-plane */
+  /* feature grid (icon cards) */
   .planes{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
   @media(max-width:760px){.planes{grid-template-columns:1fr}}
-  .plane{border:1px solid var(--line);border-radius:16px;padding:26px;background:var(--panel);transition:.4s}
+  .plane{border:1px solid var(--line);border-radius:16px;padding:20px 22px;background:var(--panel);transition:.4s}
   .plane:hover{border-color:rgba(155,91,245,.5);transform:translateY(-4px)}
-  .plane .icn{width:42px;height:42px;border-radius:11px;background:rgba(155,91,245,.1);border:1px solid rgba(155,91,245,.3);display:flex;align-items:center;justify-content:center;margin-bottom:18px}
-  .plane .icn svg{width:22px;height:22px;stroke:var(--violet)}
-  .plane h4{font-family:var(--font-display);font-weight:400;font-size:20px;margin-bottom:8px}
+  .plane .icn{width:36px;height:36px;border-radius:10px;background:rgba(155,91,245,.1);border:1px solid rgba(155,91,245,.3);display:flex;align-items:center;justify-content:center;margin-bottom:13px}
+  .plane .icn svg{width:19px;height:19px;stroke:var(--violet)}
+  .plane h4{font-family:var(--font-display);font-weight:400;font-size:19px;line-height:1.15;margin-bottom:7px}
   .plane p{font-size:13.5px;color:var(--muted)}
+  .plane .tag{display:inline-block;margin-left:8px;font-family:var(--font-mono);font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet);border:1px solid rgba(155,91,245,.35);border-radius:100px;padding:2px 8px;vertical-align:middle}
+  .plane.hi{border-color:rgba(155,91,245,.5);background:linear-gradient(160deg,rgba(155,91,245,.1),var(--panel) 60%)}
+  /* tier 1 · the two new first-class destinations */
+  .planes.dest{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:760px){.planes.dest{grid-template-columns:1fr}}
+  /* tier 2 · supporting capabilities, compact */
+  .planes.compact{grid-template-columns:repeat(5,1fr);gap:14px}
+  @media(max-width:1040px){.planes.compact{grid-template-columns:repeat(3,1fr)}}
+  @media(max-width:760px){.planes.compact{grid-template-columns:1fr 1fr}}
+  .planes.compact .plane{padding:15px 17px;border-radius:14px}
+  .planes.compact .icn{width:30px;height:30px;border-radius:9px;margin-bottom:10px}
+  .planes.compact .icn svg{width:16px;height:16px}
+  .planes.compact h4{font-size:15.5px;margin-bottom:5px}
+  .planes.compact p{font-size:12.5px;line-height:1.5}
 
   /* customer signal */
   .cust{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
@@ -420,13 +452,8 @@
   /* ---------- Roadmaps · nodal gantt + 3D phase stage ---------- */
   .rm{margin-top:44px}
   .rm-stage{position:relative;border:1px solid var(--line);border-radius:20px;overflow:hidden;
-    background:linear-gradient(180deg,rgba(24,7,38,.55),rgba(12,8,19,.25));min-height:clamp(300px,46vh,440px)}
+    background:linear-gradient(180deg,rgba(24,7,38,.55),rgba(12,8,19,.25));min-height:clamp(180px,27.6vh,264px)}
   .rm-stage canvas{display:block;width:100%;height:100%;position:absolute;inset:0}
-  .rm-stagecap{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
-    padding:18px 22px;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--corn);
-    background:linear-gradient(0deg,rgba(10,6,16,.78),transparent);pointer-events:none}
-  .rm-stagecap b{color:var(--ink);font-weight:400}
-  .rm-stagecap .ph{color:var(--violet)}
   .rm-hint{position:absolute;top:16px;right:20px;font-family:var(--font-mono);font-size:9.5px;letter-spacing:.16em;
     text-transform:uppercase;color:var(--faint);pointer-events:none;display:flex;align-items:center;gap:7px}
   .rm-hint::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--violet);box-shadow:0 0 8px var(--violet-glow);animation:pulse 2s infinite}
@@ -536,7 +563,7 @@
 <section id="hero" data-nav="Top">
   <div class="hero-scrim" aria-hidden="true"></div>
   <h1 class="hero-title sr">INTEGRATE STRATEGY</h1>
-  <div class="hero-eyebrow"><div class="eyebrow rv">H2 2026 · Product Strategy · Draft v0.4</div></div>
+  <div class="hero-eyebrow"><div class="eyebrow rv">H2 2026 · Product Strategy</div></div>
   <div class="hero-below">
     <p class="hero-subtitle rv">For the rest of <span class="grad">2026</span></p>
   </div>
@@ -549,7 +576,7 @@
   <div class="wrap">
     <div class="eyebrow rv">A nod to H1 2026</div>
     <h2 class="h-lg rv" style="margin-bottom:22px">This year has been<br>about <span class="grad">foundations.</span></h2>
-    <p class="lede rv" style="margin-bottom:50px;max-width:66ch">In H1 we laid the foundation for a multi-dimensional program-management model, and started making our data infrastructure defensible at enterprise and government grade. Coming out of it, we have:</p>
+    <p class="lede rv" style="margin-bottom:50px;max-width:66ch">H1 was foundation-laying, six ways over: an AI and agents substrate, a data-graduation MVP now demonstrating IL5, CRDT-powered realtime, enterprise table stakes, a UX platform built to scale, and the groundwork to build our own integrations. Coming out of it, we have:</p>
 
     <div class="lookback lb-carousel rv" id="lbCarousel">
       <div class="lb-viewport" id="lbViewport">
@@ -573,7 +600,7 @@
             <div class="lb-body">
               <div class="lb-kicker">Foundation · Data Graduation</div>
               <h3>A data-graduation MVP</h3>
-              <p><code>integrate-data-graduation-svc</code> is live. Phase 1 (Core Data &amp; IL2–IL4) is deploying, multi-object graduation is in progress. We're beginning to understand demotion, though we haven't solved it yet.</p>
+              <p><code>integrate-data-graduation-svc</code> is live, and we can now demonstrate graduating data into <strong>IL5</strong>. Proving that path end-to-end is the hard part: every environment above it graduates on the same machinery, so this is the foundation all future graduation builds on.</p>
             </div>
           </article>
           <article class="lb">
@@ -595,7 +622,7 @@
             <div class="lb-body">
               <div class="lb-kicker">Foundation · Enterprise Table Stakes</div>
               <h3>Table stakes worthy of enterprise</h3>
-              <p>Tags, custom statuses, priority, custom colors, grouping, approvals, Kanban, baselines, Jira integration: the everyday essentials teams expect at scale.</p>
+              <p>Tags, custom statuses, priority, custom colors, grouping, approvals, Kanban, and baselines: the everyday essentials teams expect at scale.</p>
             </div>
           </article>
           <article class="lb">
@@ -612,12 +639,12 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">06</span>
-              <div class="lb-ic" data-mini="5"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/></svg></div>
+              <div class="lb-ic" data-mini="5"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="19" cy="19" r="2"/><path d="M6.5 6.5 10 10M17.5 6.5 14 10M17.5 17.5 14 14"/></svg></div>
             </div>
             <div class="lb-body">
-              <div class="lb-kicker">Foundation · Multi-Dimensional Model</div>
-              <h3>First steps toward the multi-dimensional model</h3>
-              <p>The Schedule + Workload + Budget information architecture stood up, with percent allocation and cost of labor locked in as the earliest dimensions we build on.</p>
+              <div class="lb-kicker">Foundation · Integrations</div>
+              <h3>Ready to roll our own integrations</h3>
+              <p>The <strong>Token Motel</strong> service gives us secure, managed credential and token storage for third-party connections. With that piece in place, we can build first-party integrations ourselves instead of renting them.</p>
             </div>
           </article>
         </div>
@@ -648,7 +675,7 @@
   <div class="wrap">
     <div class="eyebrow rv">Where we aimed</div>
     <h2 class="h-lg rv" style="margin-bottom:22px">The goals we set at the<br><span class="grad">top of the year.</span></h2>
-    <p class="lede rv" style="margin-bottom:44px;max-width:66ch">Back in January we committed to one north-star number, a deliberate 80/20 focus, and three missions to get there. Before the honest mid-year check-in, here's what we said we'd do.</p>
+    <p class="lede rv" style="margin-bottom:44px;max-width:66ch">Back in January we committed to one north-star number, a deliberate 80/20 focus, and three missions to get there.</p>
 
     <div class="split" style="align-items:flex-end;margin-bottom:50px">
       <div>
@@ -688,13 +715,13 @@
 <section id="number" data-nav="The Number">
   <span class="sec-label">01 · Goals check-in</span>
   <div class="wrap">
-    <div class="eyebrow rv">The honest mid-year number</div>
+    <div class="eyebrow rv">The mid-year number</div>
     <div class="split" style="align-items:flex-end">
       <div>
         <div class="bignum"><span id="counter">$0.0M</span></div>
         <div class="of rv">of the <s>$25M</s> 2026 government ARR mission</div>
       </div>
-      <p class="lede rv">We said $25M. We're at roughly <strong style="color:#fff">$7M</strong>. We won't close that gap on the current trajectory, so we say so plainly. Credible renewed landing: <span class="grad">low-to-mid teens</span>. Product controls the two unlocks these deals depend on.</p>
+      <p class="lede rv">We likely won't close that gap on the current trajectory. Credible renewed landing: <span class="grad">low-to-mid teens</span>. Product controls the two unlocks these deals depend on.</p>
     </div>
     <div class="proof stagger">
       <div class="card">
@@ -709,13 +736,13 @@
       <div class="card">
         <div class="k">Proof point · Velocity</div>
         <h4>Velocity is measurably up.</h4>
-        <p>Commit and merged-PR volume climbed through H1 while change-failure signals stayed flat.</p>
+        <p>We adopted <strong style="color:#cfcfd6">agentic engineering practices</strong> aggressively in-house and tightened every process around them. Commit and merged-PR volume climbed through H1 while change-failure signals stayed flat. We're screaming, and this is lifeblood, not a side experiment.</p>
         <svg class="spark" width="100%" height="46" viewBox="0 0 300 46" preserveAspectRatio="none"><polyline fill="none" stroke="#9B5BF5" stroke-width="2" points="0,38 40,34 80,30 120,26 160,20 200,17 240,11 300,6"/><polyline fill="none" stroke="#5c5c64" stroke-width="1.5" stroke-dasharray="4 4" points="0,33 60,32 120,33 180,32 240,33 300,32"/></svg>
       </div>
       <div class="card">
         <div class="k">Proof point · Integrity</div>
         <h4>Integrity is holding, and now resourced.</h4>
-        <p>CMMC work continues on schedule. We stood up the <strong style="color:#e9dcff">Agentic Operations Engineer</strong> role: a dedicated owner for environments, release safety, and compliance instead of taxing feature teams.</p>
+        <p>CMMC work continues on schedule. Our <strong style="color:#e9dcff">security posture</strong> is becoming a team-wide strength: environments, release safety, and compliance are everyday practice now, not someone else's job.</p>
       </div>
     </div>
   </div>
@@ -761,7 +788,7 @@
   <div class="wrap">
     <div class="eyebrow rv">The shifting persona</div>
     <h2 class="h-lg rv">From the Manager<br>to the <span class="grad">Leader.</span></h2>
-    <p class="lede rv" style="margin-top:24px;margin-bottom:44px">We spent the last year focused on the manager who lives in the schedule. As we close bigger contracts, the buyer we must speak to directly is moving up the org chart.</p>
+    <p class="lede rv" style="margin-top:24px;margin-bottom:44px">We spent the last year focused on the manager who lives in the schedule. As we close bigger contracts, the buyer must see direct value for themselves in our product.</p>
 
     <div class="persona-grid">
       <div class="persona old rv">
@@ -776,21 +803,59 @@
       </div>
       <div class="persona-arrow rv">→</div>
       <div class="persona new rv">
-        <div class="tier"><span>2026 focus</span><span>Directors / O-6+</span></div>
+        <div class="tier"><span>2026 focus</span><span>Flag / SES / O-6+</span></div>
         <h3>The Leader</h3>
         <div class="role">Mission leadership &amp; directors: the economic buyer</div>
         <ul>
           <li>Buys <strong style="color:#fff">visibility and outcomes</strong>, not status and workflows</li>
           <li>Under a directive to modernize processes and simplify how teams work</li>
-          <li>Obsessed with organizational efficiency: unblocking people, solving problems</li>
+          <li>Balancing scarce time against a constant need for insight: the federal equivalent of a CEO</li>
+          <li>Makes <strong style="color:#fff">multi-billion-dollar calls</strong> and wants options ready before a program goes sideways</li>
           <li>Needs teams to report up <strong style="color:#fff">without burning hours</strong> building briefs</li>
         </ul>
       </div>
     </div>
 
-    <div class="pullquote rv" style="margin-top:6px">
+    <!-- ---- the pair: who builds the report-up, who consumes it ---- -->
+    <div class="eyebrow rv" style="margin-top:64px;margin-bottom:16px">The report-up loop</div>
+    <p class="lede rv" style="margin-bottom:8px;max-width:66ch">The <strong>Conduit</strong> is deputized to assemble the picture; the <strong>Leader</strong> is answerable for what it says. Every hour we take out of building the brief lands on both sides of that arrow.</p>
+
+    <div class="persona-grid">
+      <div class="persona pair rv">
+        <div class="tier"><span>Builds the report-up</span><span>Mid-career · deputized</span></div>
+        <h3>The Conduit</h3>
+        <div class="role">The deputized owner: leadership's connective tissue</div>
+        <ul>
+          <li>Deputized by leadership to own an effort: a program, a portfolio, a team with a mandate</li>
+          <li>Their team <strong style="color:#fff">is the end user</strong>, and they've felt the same pain in earlier roles</li>
+          <li>Rarely holds the budget, but is senior enough to <strong style="color:#fff">ask for resources and get them</strong> once value is proven</li>
+          <li>Measured on saving their leadership's time and being seen as capable, trustworthy, efficient</li>
+          <li>On the hook for keeping contractors accountable and honest</li>
+        </ul>
+        <span class="ex"><b>Looks like</b>Ms. Helen Ying (SSIO) · Dr. Caitlin Thorn (MDA) · Maj Alexander Allard (AATS) · Mr. Ryan Kennedy (VSA)</span>
+      </div>
+      <div class="persona-arrow tagged rv">
+        <span class="arw">→</span>
+        <span class="arw-lbl">feeds</span>
+      </div>
+      <div class="persona pair reads rv">
+        <div class="tier"><span>Consumes the report-up</span><span>Flag · SES · Appointee</span></div>
+        <h3>The Leader</h3>
+        <div class="role">The economic buyer: owns the outcome</div>
+        <ul>
+          <li>Owns delivery to the warfighter, budget execution, and the <strong style="color:#fff">political defense of both</strong></li>
+          <li>Who Congress calls when a program slips, and who tells the service chief whether the money bought what was promised</li>
+          <li>A dozen programs a week, two or three layers of briefing up, constant calls on where to accept risk</li>
+          <li>Wants confidence in the decision and an option ready when one program starts to go sideways</li>
+          <li>Playing for their vision, their legacy, and keeping the senior-most leadership happy</li>
+        </ul>
+        <span class="ex"><b>Looks like</b>Maj Gen Steve Purdy (SAF/SQ) · Gen Michael Guetlein (DRPM Golden Dome) · Lt Gen Jason Voorheis (DAF PAE C3BM) · RDML Metcalf (Navy DPAE Combatants) · Hon Michael Duffey (A&amp;S) · Ms. Erin Carper (SCPNT)</span>
+      </div>
+    </div>
+
+    <div class="pullquote rv" style="margin-top:52px">
       <q>If you pitched this while my director was here, I would get a promotion.</q>
-      <cite>SSIO, on the risk engine · exactly the report-up the leader rewards</cite>
+      <cite>SSIO, on the risk engine · the Conduit, describing exactly what the Leader rewards</cite>
     </div>
   </div>
 </section>
@@ -801,8 +866,8 @@
   <span class="sec-label">04 · Who are these people</span>
   <div class="wrap">
     <div class="eyebrow rv">Who are these people</div>
-    <h2 class="h-lg rv" style="margin-bottom:20px">Three leaders,<br>one <span class="grad">report-up problem.</span></h2>
-    <p class="lede rv" style="margin-bottom:6px;max-width:64ch">The Leader isn't an abstraction. These are the buyers we're building for, each answerable for outcomes across programs they can't see clearly today.</p>
+    <h2 class="h-lg rv" style="margin-bottom:20px">Six people,<br>one <span class="grad">report-up problem.</span></h2>
+    <p class="lede rv" style="margin-bottom:6px;max-width:66ch">None of these are abstractions. Three own the outcome and three were deputized to report it up: the same problem seen from both ends of the arrow.</p>
 
     <div class="lb-carousel rv" id="pplCarousel">
       <div class="lb-viewport" id="pplViewport">
@@ -813,12 +878,12 @@
               <div class="lb-ic"><b class="ppl-av">P</b></div>
             </div>
             <div class="lb-body">
-              <div class="lb-kicker">General · O-9 · Program Executive Office</div>
-              <h3>General Purdy</h3>
-              <div class="ppl-role">The Mission Owner</div>
+              <div class="lb-kicker">Maj Gen · O-8 · SAF/SQ</div>
+              <h3>Maj Gen Steve Purdy</h3>
+              <div class="ppl-role">The Leader · consumes the report-up</div>
               <div class="ppl-fields">
-                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Outcomes and delivery dates across the portfolio, answering to leadership under a top-down mandate to modernize acquisition.</p></div>
-                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Fewer surprises, faster decisions, and a brief that's always current, never a task list.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>The outcome of the portfolio: delivery to the warfighter, budget execution, and the political defense of both, under a top-down mandate to modernize acquisition.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Fewer surprises, decisions made with confidence, an option ready when a program goes sideways, and a brief that's always current, never a task list.</p></div>
               </div>
             </div>
           </article>
@@ -828,27 +893,72 @@
               <div class="lb-ic"><b class="ppl-av">G</b></div>
             </div>
             <div class="lb-body">
-              <div class="lb-kicker">Director · SES · Directorate lead</div>
-              <h3>Director Goutline</h3>
-              <div class="ppl-role">The Modernizer</div>
+              <div class="lb-kicker">General · O-10 · DRPM Golden Dome</div>
+              <h3>Gen Michael Guetlein</h3>
+              <div class="ppl-role">The Leader · consumes the report-up</div>
               <div class="ppl-fields">
-                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Standardizing how the directorate runs and cutting busywork across dozens of teams.</p></div>
-                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Risk surfaced before it becomes slip, and roll-ups that assemble themselves so people spend time on the work, not the reporting of it.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Standing up an integrated missile-defense architecture across dozens of programs, contractors, and services on a compressed, national-priority timeline.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>One always-current picture of health across every interdependent program, schedule risk caught early across the whole architecture, and briefing the Hill without a fire drill.</p></div>
               </div>
             </div>
           </article>
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">03</span>
-              <div class="lb-ic"><b class="ppl-av">C</b></div>
+              <div class="lb-ic"><b class="ppl-av">D</b></div>
             </div>
             <div class="lb-body">
-              <div class="lb-kicker">Colonel · O-6 · Golden Dome</div>
-              <h3>Caitlin Thorne</h3>
-              <div class="ppl-role">The Integrator</div>
+              <div class="lb-kicker">Senior appointee · OSD A&amp;S</div>
+              <h3>Hon Michael Duffey</h3>
+              <div class="ppl-role">The Leader · consumes the report-up</div>
               <div class="ppl-fields">
-                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Knitting a multi-domain missile-defense architecture together across dozens of programs, contractors, and services on a compressed, national-priority timeline.</p></div>
-                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>One always-current picture of health across every interdependent program, schedule risk caught early across the whole architecture, and briefing leadership and the Hill without a fire drill.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Acquisition and sustainment across the whole Department: the policy, the pace, and the political defense of how the money gets spent.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Evidence that reform is working, comparable signal across programs that don't report the same way, and answers ready before the question is asked.</p></div>
+              </div>
+            </div>
+          </article>
+          <article class="lb">
+            <div class="lb-visual">
+              <span class="lb-n">04</span>
+              <div class="lb-ic"><b class="ppl-av">Y</b></div>
+            </div>
+            <div class="lb-body">
+              <div class="lb-kicker">Deputized program owner · SSIO</div>
+              <h3>Ms. Helen Ying</h3>
+              <div class="ppl-role">The Conduit · builds the report-up</div>
+              <div class="ppl-fields">
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>An effort leadership deputized them to own, delivering through teams who are the end users, without holding the budget themselves.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Keeping teams on work that brings value, saving their leadership's time, keeping contractors accountable and honest, and roll-ups that assemble themselves.</p></div>
+              </div>
+            </div>
+          </article>
+          <article class="lb">
+            <div class="lb-visual">
+              <span class="lb-n">05</span>
+              <div class="lb-ic"><b class="ppl-av">T</b></div>
+            </div>
+            <div class="lb-body">
+              <div class="lb-kicker">Deputized technical owner · MDA</div>
+              <h3>Dr. Caitlin Thorn</h3>
+              <div class="ppl-role">The Conduit · builds the report-up</div>
+              <div class="ppl-fields">
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>Knitting technical work together across programs and contractors, and turning it into something leadership can act on.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Not losing the technical truth on the way up, catching the slip before it lands in a brief, and never rebuilding the same roll-up twice.</p></div>
+              </div>
+            </div>
+          </article>
+          <article class="lb">
+            <div class="lb-visual">
+              <span class="lb-n">06</span>
+              <div class="lb-ic"><b class="ppl-av">A</b></div>
+            </div>
+            <div class="lb-body">
+              <div class="lb-kicker">Major · O-4 · AATS</div>
+              <h3>Maj Alexander Allard</h3>
+              <div class="ppl-role">The Conduit · builds the report-up</div>
+              <div class="ppl-fields">
+                <div class="ppl-field"><span class="ppl-lbl">Responsible for</span><p>A team with a mandate and no slack in it: high-performing, mid-career, and on the way to a more senior seat.</p></div>
+                <div class="ppl-field"><span class="ppl-lbl">Cares about</span><p>Removing the barriers slowing the team down, having felt the same pain in earlier roles, and being seen as capable, trustworthy, and efficient.</p></div>
               </div>
             </div>
           </article>
@@ -859,7 +969,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
         <div class="lb-progress">
-          <div class="lb-count"><b id="pplCur">01</b> <span style="opacity:.5">/</span> 03</div>
+          <div class="lb-count"><b id="pplCur">01</b> <span style="opacity:.5">/</span> 06</div>
           <div class="lb-dots" id="pplDots"></div>
         </div>
         <button class="lb-nav" id="pplNext" type="button" aria-label="Next person">
@@ -880,11 +990,6 @@
     <p class="lede rv" style="margin-bottom:44px;max-width:66ch">To be clear: nearly everything on the roadmap stays exactly as planned. Data graduation, the agent, and the platform core all continue at full weight. Serving the Leader changes the order of just a few things.</p>
     <div class="shifts stagger">
       <div class="shift">
-        <div class="n" style="color:var(--faint);letter-spacing:.14em">↓ DEPRIORITIZED</div>
-        <h3>Budgets</h3>
-        <p>EVM and commercial budgeting slide to next year: a sequencing call, not an abandonment. The Leader isn't buying budget tooling yet.</p>
-      </div>
-      <div class="shift">
         <div class="n" style="color:var(--violet);letter-spacing:.14em">↑ HIGHER PRIORITY</div>
         <h3>Reports</h3>
         <p>Executive reporting and brief-ready outputs move up: leaders buy visibility and outcomes, and need to report up without burning hours building briefs.</p>
@@ -893,6 +998,11 @@
         <div class="n" style="color:var(--violet);letter-spacing:.14em">↑ HIGHER PRIORITY</div>
         <h3>Risk</h3>
         <p>Risk surfacing becomes first-class: risk flagged before it becomes slip is exactly the report-up that gets a leader promoted.</p>
+      </div>
+      <div class="shift">
+        <div class="n" style="color:var(--faint);letter-spacing:.14em">↓ TEMPORARILY DEPRIORITIZED</div>
+        <h3>Budgets</h3>
+        <p>EVM and commercial budgeting slide to next year: a sequencing call, not an abandonment. The Leader isn't buying budget tooling yet.</p>
       </div>
     </div>
     <div class="moatline rv" style="margin-top:44px">Everything else holds. <span class="grad">Only the sequencing moves</span>, the mission is unchanged.</div>
@@ -921,29 +1031,18 @@
     <div class="initwrap" style="margin-top:48px">
       <div class="rv">
         <p class="lede" style="margin-bottom:18px">No other program-management tool moves data up and down the classification ladder as a product capability. Being on these networks at all is rarified. Enabling collaboration <em>between</em> them is the moat.</p>
-        <p class="blurb">Every cross-domain item displays as a <strong style="color:#cfcfd6">synced copy</strong>: its own identity, permissions, and history, plus a sync state to its counterpart. Sync is symmetric; visibility is not. Demotion never mutates the high-side source.</p>
-        <div class="pillrow">
-          <span class="pill"><span class="num">0</span>Version control</span>
-          <span class="pill"><span class="num">1</span>Promotion to JWICS</span>
-          <span class="pill"><span class="num">2</span>SAP availability · PID / JADE</span>
-          <span class="pill"><span class="num">3</span>IL5 → Commercial free-flow (MVP)</span>
-          <span class="pill"><span class="num">4</span>Portion &amp; banner markings</span>
-          <span class="pill"><span class="num">5</span>Diode demotion (high→low)</span>
-        </div>
       </div>
       <div class="rv">
         <div class="ladder-flow"><span class="up">▲ Promotion</span><span>Synced copies both ways</span><span>▼ Demotion</span></div>
         <div class="ladder" id="ladder">
-          <div class="rung" data-tone="top"><span class="env">JWICS</span><span class="desc">Top secret / SCI</span><span class="lvl">EOY target</span></div>
-          <div class="rung"><span class="env">SAP</span><span class="desc">Special access · PID + JADE</span><span class="lvl">EOY target</span></div>
-          <div class="rung"><span class="env">SIPR</span><span class="desc">Secret</span><span class="lvl">Promote through</span></div>
-          <div class="rung"><span class="env">IL5</span><span class="desc">CUI / higher</span><span class="lvl">Live · deploying</span></div>
-          <div class="rung"><span class="env">IL4</span><span class="desc">CUI</span><span class="lvl">Phase 1 live</span></div>
+          <div class="rung" data-tone="top"><span class="env">SAP</span><span class="desc">Special access · PID + JADE</span><span class="lvl">EOY target</span></div>
+          <div class="rung"><span class="env">JWICS</span><span class="desc">Top secret / SCI</span><span class="lvl">Near term target</span></div>
+          <div class="rung"><span class="env">SIPR</span><span class="desc">Secret</span><span class="lvl">Near term target</span></div>
+          <div class="rung"><span class="env">NIPR</span><span class="desc">CUI / higher</span><span class="lvl">Live · deploying</span></div>
           <div class="rung"><span class="env">Commercial</span><span class="desc">Public domain</span><span class="lvl">Demotion target</span></div>
         </div>
       </div>
     </div>
-    <p class="blurb rv" style="margin-top:40px"><strong style="color:#e9dcff">Non-negotiable.</strong> Data isolation across orgs, programs, and permission boundaries is preserved in every path. Audit trails survive the transition. Nothing regresses our security posture. Failures are never silent on a customer environment. <em>AI-assisted declassification is the follow-on where Initiatives 1 and 2 converge, deferred to next year.</em></p>
   </div>
 </section>
 <div class="divider"></div>
@@ -969,33 +1068,30 @@
     <div class="initwrap" style="margin-top:48px">
       <div class="rv">
         <p class="lede" style="margin-bottom:20px">The best PM AI-agent on the market should feel like a junior teammate: hand it a task, it comes back with <em>"here's what I did, and what I think you should do next."</em></p>
-        <p class="blurb" style="margin-bottom:14px">The roadmap runs in phases. H2 is where the agent starts <strong style="color:#fff">doing</strong> instead of just <strong style="color:#fff">knowing</strong>. The Schedule Agent is the centerpiece: every edit proposed, every edit approved. The model has no write tool.</p>
+        <a class="doclink" href="https://sloanal.github.io/agentic-integrate-roadmap/agentic-integrate-ceo-canvas.html" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"/><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>
+          The full Agentic Integrate roadmap
+          <span class="arw">&rarr;</span>
+        </a>
+      </div>
+      <div class="rv">
         <div class="track" id="track">
           <div class="line"></div><div class="fill" id="trackfill"></div>
           <div class="step done"><div class="node">✓</div><div><div class="st">Shipped</div><h4>Summarize</h4><p>Notification summaries, at-risk projects.</p></div></div>
           <div class="step done"><div class="node">✓</div><div><div class="st">Shipped</div><h4>Understand risk</h4><p>"What's Risky," Ask Integrate v1.</p></div></div>
-          <div class="step now"><div class="node">●</div><div><div class="st">In progress now</div><h4>Understand everything</h4><p>NL Search + Drop Zone capture.</p></div></div>
+          <div class="step now"><div class="node">●</div><div><div class="st">In progress now</div><h4>Understand everything</h4><p>NL Search across every project.</p></div></div>
+          <div class="step now"><div class="node">●</div><div><div class="st">In progress now</div><h4>Ingest Everything</h4><p>Drop Zone: PDFs &amp; sheets in, proposed updates out.</p></div></div>
           <div class="step"><div class="node">4</div><div><div class="st">Planned · ~Aug</div><h4>Change everything</h4><p>Schedule Agent (Manipulate) on the ChangeSet + Approval contract.</p></div></div>
-          <div class="step"><div class="node">5</div><div><div class="st">Planned</div><h4>Build</h4><p>Generate entire schedules from a description: the full agent experience.</p></div></div>
+          <div class="step"><div class="node">5</div><div><div class="st">Planned</div><h4>Build anything</h4><p>Generate entire schedules from a description, and the Charts Agent building and refining the visuals in a loop: the full agent experience.</p></div></div>
           <div class="step"><div class="node">6</div><div><div class="st">Planned</div><h4>Off-platform</h4><p>@Integrate anywhere via MCP, deferred (§ descoped).</p></div></div>
         </div>
       </div>
-      <div class="rv">
-        <div class="feats">
-          <div class="feat"><b>Natural Language Search</b><span>Editable interpretation chips.</span><span class="badge">In progress</span></div>
-          <div class="feat"><b>Drop Zone Capture</b><span>PDFs &amp; sheets → proposed updates.</span><span class="badge">In progress</span></div>
-          <div class="feat"><b>Unified Risk Experience</b><span>Every signal on one surface.</span><span class="badge">Planned</span></div>
-          <div class="feat"><b>Agents Page</b><span>Every run, in flight or done.</span><span class="badge">Planned</span></div>
-          <div class="feat"><b>Schedule Agent</b><span>Manipulate → Build.</span><span class="badge">Planned</span></div>
-          <div class="feat"><b>Charts Agent</b><span>Builds &amp; refines visuals in a loop.</span><span class="badge">Planned</span></div>
-        </div>
-        <div class="card" style="margin-top:22px">
-          <div class="k">First-class workstream · Evals</div>
-          <h4>Shape the output, not just ship the surface.</h4>
-          <p>Labeled regression sets per capability, the groundedness judge as a CI release gate, and product-owned review of output <em>quality and shape</em>. <strong style="color:#e9dcff">No agent capability ships or expands without its eval suite.</strong></p>
-        </div>
-      </div>
     </div>
+    <a class="doclink rv" href="https://sloanal.github.io/agentic-integrate-roadmap/agentic-integrate-ceo-canvas.html" target="_blank" rel="noopener" style="margin-top:34px">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h18"/><circle cx="6" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="18" cy="12" r="2"/></svg>
+      The full Agentic Integrate roadmap
+      <span class="arw">&rarr;</span>
+    </a>
   </div>
 </section>
 <div class="divider"></div>
@@ -1020,50 +1116,58 @@
 
     <p class="lede rv" style="margin:40px 0 30px;max-width:70ch">The buyer is now an executive whose team reconstructs status by hand: screenshots, rebuilt tables, manually assembled briefs. We give that work a home.</p>
 
-    <div class="planes stagger">
-      <div class="plane">
-        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <h4>Data plane</h4>
-        <p>The work itself: resources, people, budgets, locations. Stackable dimension panels under a shared timeline.</p>
+    <div class="eyebrow rv" style="margin-bottom:14px">Two new destinations</div>
+    <div class="planes dest stagger">
+      <div class="plane hi">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="18" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h4>Reports<span class="tag">New</span></h4>
+        <p>Reporting stops being an export button and becomes a destination of its own: dashboards, briefs, and rich docs as one connected surface area threaded through the rest of the app.</p>
       </div>
-      <div class="plane">
-        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div>
-        <h4>Lens plane</h4>
-        <p>Filters, display settings, saved views: representations that shape how data is shown without changing it.</p>
-      </div>
-      <div class="plane">
-        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6"/></svg></div>
-        <h4>Work output</h4>
-        <p>Where data leaves the app: documents, presentations, exports, agent-shaped artifacts. This is <strong style="color:#e9dcff">Compose</strong>.</p>
+      <div class="plane hi">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg></div>
+        <h4>Risk<span class="tag">New</span></h4>
+        <p>Risk gets a first-class home instead of living as warnings scattered across the app: every signal on one surface, sitting alongside inbox and approvals.</p>
       </div>
     </div>
 
-    <div class="initwrap" style="margin-top:44px">
-      <div class="rv">
-        <div class="eyebrow" style="margin-bottom:16px">The Rail · navigational backbone</div>
-        <p class="blurb">A persistent icon rail with an adaptive secondary panel. It gives <strong style="color:#cfcfd6">risk a first-class home</strong> alongside inbox and approvals, a Workspace of stackable dimensions, Compose for reporting, and an Agents home where chats and call recordings persist instead of vaporizing. It even unlocks a stripped-down mobile view as a breakpoint.</p>
+    <div class="eyebrow rv" style="margin:32px 0 14px">Supporting capabilities</div>
+    <div class="planes compact stagger">
+      <div class="plane">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M4 21V4"/><path d="M4 5h13l-2 4 2 4H4"/></svg></div>
+        <h4>Executive milestone view</h4>
+        <p>The "nacho chip" in nearly every O-6+ briefing.</p>
       </div>
-      <div class="rv">
-        <div class="feats">
-          <div class="feat"><b>Executive milestone view</b><span>The "nacho chip" in nearly every O-6+ briefing.</span></div>
-          <div class="feat"><b>Chart builder &amp; dashboards</b><span>Config from live data, no eng support.</span></div>
-          <div class="feat"><b>Brief-ready exports</b><span>Presentation-grade PDF / slide / image.</span></div>
-          <div class="feat"><b>Dashboard sharing</b><span>Auto-share to leadership, in-model.</span></div>
-          <div class="feat"><b>Living documents</b><span>"Single brief, always current."</span></div>
-        </div>
+      <div class="plane">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="4" width="3" height="14"/></svg></div>
+        <h4>Chart builder &amp; dashboards</h4>
+        <p>Config from live data, no eng support.</p>
+      </div>
+      <div class="plane">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg></div>
+        <h4>Brief-ready exports</h4>
+        <p>Presentation-grade PDF / slide / image.</p>
+      </div>
+      <div class="plane">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5 15.4 17.5M15.4 6.5 8.6 10.5"/></svg></div>
+        <h4>Dashboard sharing</h4>
+        <p>Auto-share to leadership, in-model.</p>
+      </div>
+      <div class="plane">
+        <div class="icn"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v6h-6"/></svg></div>
+        <h4>Living documents</h4>
+        <p>"Single brief, always current."</p>
       </div>
     </div>
-    <p class="blurb rv" style="margin-top:38px">Underneath, three supports. An <strong style="color:#cfcfd6">engagement flywheel</strong> (status gravity-well, websockets, notification bundling) keeps data fresh, since the agent's credibility depends on it. <strong style="color:#cfcfd6">Permissions-as-architecture</strong> makes every surface consult the same permission truth. And a relentless UX burn-down takes MVP features from "exists" to "valuable."</p>
   </div>
 </section>
-<div class="divider"></div>
+<div class="divider sub"></div>
 
-<!-- ============ ROADMAP · RISK ============ -->
-<section id="rm-risk" data-nav="Risk Roadmap">
-  <span class="sec-label">09 · Roadmap · Risk experience</span>
+<!-- ============ ROADMAP · RISK (sub-section of Initiative 03) ============ -->
+<section id="rm-risk" data-nav="Risk Roadmap" style="padding-top:56px">
+  <span class="sec-label">08a · Risk roadmap</span>
   <div class="wrap">
-    <div class="eyebrow rv">Higher priority · Risk</div>
-    <h2 class="h-md rv">Surface risk before<br>it becomes slip.</h2>
+    <div class="eyebrow rv">Initiative 03 · Higher-priority risk</div>
+    <h2 class="h-sub rv">Surface risk before<br>it becomes slip.</h2>
     <p class="lede rv" style="margin-top:22px;max-width:68ch">Not one feature but six or seven intertwined &mdash; each independently shippable, each independently valuable. One boundary replaces the severity ladder. <strong>Tap any phase</strong> to explore it.</p>
     <div class="rm">
       <div class="gantt rv">
@@ -1075,7 +1179,6 @@
         <canvas id="riskCanvas"></canvas>
         <div class="rm-tag" id="riskTag">&nbsp;</div>
         <div class="rm-hint">Drag to orbit</div>
-        <div class="rm-stagecap"><span class="ph" id="riskCapPh">&nbsp;</span><span id="riskCapDesc">&nbsp;</span></div>
       </div>
     </div>
     <a class="doclink rv" href="https://sloanal.github.io/integrate-dimensions/prototype-c.html" target="_blank" rel="noopener" style="margin-top:34px">
@@ -1085,14 +1188,14 @@
     </a>
   </div>
 </section>
-<div class="divider"></div>
+<div class="divider sub"></div>
 
-<!-- ============ ROADMAP · REPORTS ============ -->
-<section id="rm-reports" data-nav="Reports Roadmap">
-  <span class="sec-label">10 · Roadmap · Reports</span>
+<!-- ============ ROADMAP · REPORTS (sub-section of Initiative 03) ============ -->
+<section id="rm-reports" data-nav="Reports Roadmap" style="padding-top:56px">
+  <span class="sec-label">08b · Reports roadmap</span>
   <div class="wrap">
-    <div class="eyebrow rv">Higher priority · Reports</div>
-    <h2 class="h-md rv">Become the brief,<br>block by block.</h2>
+    <div class="eyebrow rv">Initiative 03 · Higher-priority reports</div>
+    <h2 class="h-sub rv">Become the brief,<br>block by block.</h2>
     <p class="lede rv" style="margin-top:22px;max-width:68ch">A visual-intelligence workspace assembled from reusable blocks &mdash; live dashboards, reports and rich docs. Every block is built once, then reused everywhere. <strong>Tap any phase</strong> to explore it.</p>
     <div class="rm">
       <div class="gantt rv">
@@ -1104,7 +1207,6 @@
         <canvas id="reportsCanvas"></canvas>
         <div class="rm-tag" id="reportsTag">&nbsp;</div>
         <div class="rm-hint">Drag to orbit</div>
-        <div class="rm-stagecap"><span class="ph" id="reportsCapPh">&nbsp;</span><span id="reportsCapDesc">&nbsp;</span></div>
       </div>
     </div>
     <a class="doclink rv" href="https://sloanal.github.io/integrate-dimensions/prototype-c.html" target="_blank" rel="noopener" style="margin-top:34px">
@@ -1128,7 +1230,7 @@
   .demo-note .dot{width:7px;height:7px;border-radius:50%;background:var(--violet);box-shadow:0 0 10px var(--violet-glow);animation:pulse 2s infinite}
 </style>
 <section id="demos" data-nav="Demos">
-  <span class="sec-label">11 · Live demos</span>
+  <span class="sec-label">09 · Live demos</span>
   <div class="wrap">
     <div class="eyebrow rv">See it in action</div>
     <h2 class="h-lg rv" style="margin-bottom:20px">Live <span class="grad">demos.</span></h2>
@@ -1218,6 +1320,12 @@ function decode(el, text, cad, done){
   cad=cad||30;
   if(reduce){ el.textContent=text; done&&done(); return; }
   el.classList.add('decoding');
+  /* pin the box: the placeholder glyphs come from a fallback font and can be wider
+     than the characters they stand in for, which would otherwise re-wrap the label */
+  const h=el.getBoundingClientRect().height;
+  const wasH=el.style.height, wasOv=el.style.overflow;
+  if(h){ el.style.height=h+'px'; el.style.overflow='hidden'; }
+  const unpin=()=>{ el.style.height=wasH; el.style.overflow=wasOv; };
   const n=text.length; let start=null;
   (function frame(now){
     if(start===null) start=now;
@@ -1231,7 +1339,7 @@ function decode(el, text, cad, done){
     }
     el.innerHTML=html;
     if(resolved<n){ requestAnimationFrame(frame); }
-    else{ el.textContent=text; el.classList.remove('decoding'); done&&done(); }
+    else{ el.textContent=text; el.classList.remove('decoding'); unpin(); done&&done(); }
   })(performance.now());
 }
 /* decode every mono label as it enters view — the site's signature "system" motion */
@@ -1247,12 +1355,94 @@ function decode(el, text, cad, done){
 
 /* ---------- Decode ALL body copy in place (inline tags preserved, no reflow) ---------- */
 const BCH="ABCDEFGHKMNPRSTUVWXYZ0123456789#%&/\\<>=+*:·";
+/* A stand-in glyph is rarely the same width as the letter it replaces, so scrambling
+   text in place re-wraps it — a paragraph gains or loses a line mid-animation and
+   shoves everything below it around. Two guards, in order:
+   1. pick each stand-in from the handful of palette glyphs closest in width to the
+      character it covers, so the noise occupies the real text's footprint;
+   2. freeze every word into an inline-block pinned to its real width, so even a
+      mismatch can't move a line break.
+   Whitespace stays as plain text nodes, so words break onto lines exactly as before. */
+const POOLS=new Map(); let MCTX=null;
+function glyphPool(font){
+  let p=POOLS.get(font);
+  if(!p){
+    MCTX=MCTX||document.createElement('canvas').getContext('2d');
+    MCTX.font=font;
+    p={font, chars:[...BCH].map(c=>({c,w:MCTX.measureText(c).width})), near:new Map()};
+    POOLS.set(font,p);
+  }
+  return p;
+}
+function standIns(pool,ch){
+  let s=pool.near.get(ch);
+  if(s===undefined){
+    MCTX.font=pool.font;
+    const w=MCTX.measureText(ch).width;
+    s=pool.chars.slice().sort((a,b)=>Math.abs(a.w-w)-Math.abs(b.w-w)).slice(0,4).map(x=>x.c).join('');
+    pool.near.set(ch,s);
+  }
+  return s;
+}
+/* Measured rects come back multiplied by any transform on the way up — and reveal
+   transforms are still animating when a block decodes. Divide by the exact scale at
+   measurement time to get honest CSS pixels, which stay valid however the transform
+   moves afterwards. */
+function scaleOf(el){
+  let sx=1, sy=1;
+  for(let p=el; p && p.nodeType===1; p=p.parentElement){
+    const t=getComputedStyle(p).transform;
+    if(t && t!=='none'){ const m=new DOMMatrixReadOnly(t); sx*=Math.hypot(m.a,m.b)||1; sy*=Math.hypot(m.c,m.d)||1; }
+  }
+  return [sx||1, sy||1];
+}
+function freezeWords(el){
+  const h0=el.getBoundingClientRect().height;
+  const texts=[]; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null);
+  let node; while(node=w.nextNode()){ if(node.nodeValue && /\S/.test(node.nodeValue)) texts.push(node); }
+  const words=[];
+  for(const t of texts){
+    const cs=getComputedStyle(t.parentNode);           // fonts vary inside a block (<b>, <code>…)
+    const pool=glyphPool(cs.fontStyle+' '+cs.fontWeight+' '+cs.fontSize+' '+cs.fontFamily);
+    const up=cs.textTransform==='uppercase';           // measure what's actually painted
+    const frag=document.createDocumentFragment();
+    for(const tok of t.nodeValue.split(/(\s+)/)){
+      if(!tok) continue;
+      if(!/\S/.test(tok)){ frag.appendChild(document.createTextNode(tok)); continue; }
+      const s=document.createElement('span'); s.className='dcw'; s.textContent=tok;
+      frag.appendChild(s);
+      /* one entry per UTF-16 unit, so surrogate pairs (the emoji in the persona cards)
+         stay in step with the index the frame loop walks */
+      const sub=[];
+      for(const c of tok){ const g=standIns(pool, up?c.toUpperCase():c); sub.push(g); if(c.length>1) sub.push(g); }
+      words.push({el:s, real:tok, sub});
+    }
+    t.parentNode.replaceChild(frag,t);
+  }
+  /* one read pass, then one write pass — never interleaved, or every word costs a layout */
+  const [sx,sy]=scaleOf(el);
+  words.forEach(x=>{ x.w=x.el.getBoundingClientRect().width/sx; });
+  words.forEach(x=>{ x.el.style.width=x.w+'px'; });
+  /* last guard: hold the block's own height for the duration, because a word box also
+     contributes its own line box and that nudges labels whose line-height is tighter
+     than their text (.badge and friends). Line breaks are already pinned, so nothing
+     can be cut off. Width is deliberately left alone — several sections animate their
+     container width on reveal, and a pinned width would fight that. */
+  el.dataset.dch=el.style.height;
+  if(h0) el.style.height=(h0/sy)+'px';      // h0 came through the same transform
+  return words;
+}
+function thawWords(el,words){
+  words.forEach(x=>{ const p=x.el.parentNode; p&&p.replaceChild(document.createTextNode(x.real),x.el); });
+  el.style.height=el.dataset.dch||''; delete el.dataset.dch;
+  el.normalize();  // merge the pieces back into the text nodes we started with
+}
 function decodeRich(el){
   if(el.dataset.dc) return; el.dataset.dc='1';
-  const nodes=[]; const w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT,null);
-  let node; while(node=w.nextNode()){ if(node.nodeValue && /\S/.test(node.nodeValue)) nodes.push({n:node,real:node.nodeValue}); }
-  if(!nodes.length || reduce) return;
-  const total=nodes.reduce((a,x)=>a+x.real.length,0);
+  if(reduce) return;
+  const words=freezeWords(el);
+  if(!words.length){ el.normalize(); return; }
+  const total=words.reduce((a,x)=>a+x.real.length,0);
   const dur=Math.min(1150,Math.max(340,total*6));
   let start=null,last=0;
   (function frame(now){
@@ -1260,17 +1450,21 @@ function decodeRich(el){
     const resolved=Math.min(total,(now-start)/dur*total);
     const shuffle=(now-last)>28; if(shuffle) last=now;
     let idx=0;
-    for(const x of nodes){
-      const real=x.real, cur=x.n.nodeValue; let out='';
+    for(const x of words){
+      const real=x.real;
+      if(x.done){ idx+=real.length; continue; }
+      if(idx+real.length<=resolved){ x.el.textContent=real; x.done=1; idx+=real.length; continue; }
+      const cur=x.el.textContent; let out='';
       for(let i=0;i<real.length;i++,idx++){
-        const ch=real[i];
-        if(ch===' '||ch==='\n'||ch==='\t'||idx<resolved){ out+=ch; }
-        else out+= shuffle ? BCH[(Math.random()*BCH.length)|0] : (cur[i]||BCH[0]);
+        const pick=x.sub[i];
+        out+= idx<resolved ? real[i]
+            : shuffle ? pick[(Math.random()*pick.length)|0]
+            : (cur[i]||pick[0]);
       }
-      x.n.nodeValue=out;
+      x.el.textContent=out;
     }
     if(resolved<total){ requestAnimationFrame(frame); }
-    else nodes.forEach(x=>x.n.nodeValue=x.real);
+    else thawWords(el,words);
   })(performance.now());
 }
 (function(){
@@ -1282,7 +1476,7 @@ function decodeRich(el){
 })();
 
 /* chromatic-aberration reveal + condensed width on display headings */
-document.querySelectorAll('.h-lg,.h-md,.manifesto,.closer,.init-no').forEach(e=>e.classList.add('glitch'));
+document.querySelectorAll('.h-lg,.h-md,.h-sub,.manifesto,.closer,.init-no').forEach(e=>e.classList.add('glitch'));
 
 /* ---------- Loader: 3×5 shade-block diagonal wave @100ms ---------- */
 let stopLoader=()=>{};
@@ -1327,12 +1521,12 @@ document.querySelectorAll('.rv:not(#hero .rv),.stagger').forEach(e=>io.observe(e
 const prog=document.getElementById('prog');
 addEventListener('scroll',()=>{const h=document.documentElement;const s=h.scrollTop/(h.scrollHeight-h.clientHeight);prog.style.width=(s*100)+'%';},{passive:true});
 
-/* ---------- Counter $0 -> $7M ---------- */
+/* ---------- Counter $0 -> $10M ---------- */
 (function(){
   const el=document.getElementById('counter'); if(!el)return;
   let done=false;
   const ob=new IntersectionObserver(es=>{es.forEach(e=>{ if(e.isIntersecting&&!done){done=true;
-    const obj={v:0}; gsap.to(obj,{v:7,duration:2,ease:'power2.out',onUpdate(){el.textContent='$'+obj.v.toFixed(1)+'M';}});}});},{threshold:.6});
+    const obj={v:0}; gsap.to(obj,{v:10,duration:2,ease:'power2.out',onUpdate(){el.textContent='$'+obj.v.toFixed(1)+'M';}});}});},{threshold:.6});
   ob.observe(el);
 })();
 
@@ -1349,8 +1543,8 @@ addEventListener('scroll',()=>{const h=document.documentElement;const s=h.scroll
 (function(){
   const track=document.getElementById('track'), fill=document.getElementById('trackfill'); if(!track)return;
   const ob=new IntersectionObserver(es=>{es.forEach(e=>{ if(e.isIntersecting){
-    // fill up to the "now" node (~ 45%)
-    gsap.to(fill,{height:'42%',duration:1.4,ease:'power2.out'}); ob.disconnect();}});},{threshold:.3});
+    // fill up to the "now" nodes
+    gsap.to(fill,{height:'52%',duration:1.4,ease:'power2.out'}); ob.disconnect();}});},{threshold:.3});
   ob.observe(track);
 })();
 
@@ -1531,12 +1725,24 @@ mountViz('viz3',a=>{
         b.position.y=0.55-i*0.55; g.add(b); return b;});
       return t=>{ g.rotation.y=Math.sin(t*0.3)*0.28; bars.forEach((b,i)=>{ const w=0.55+Math.abs(Math.sin(t*0.8+i*0.9))*1.15; b.scale.x=w; b.position.x=-1.05+w/2; }); };
     },
-    // 5 · Multi-dimensional model — three orthogonal planes (Schedule · Workload · Budget)
+    // 5 · Integrations / Token Motel — a hub with external connectors plugged into it
     (s)=>{ const g=new THREE.Group(); s.add(g);
-      const mk=(c,rx,ry)=>{const p=new THREE.Mesh(new THREE.PlaneGeometry(1.5,1.5),new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0.2,side:THREE.DoubleSide}));p.rotation.set(rx,ry,0);g.add(p);};
-      mk(V,0,0); mk(C,Math.PI/2,0); mk(L,0,Math.PI/2);
-      const cage=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.5,1.5,1.5)),new THREE.LineBasicMaterial({color:C})); g.add(cage);
-      return t=>{ g.rotation.y=t*0.5; g.rotation.x=0.5+Math.sin(t*0.4)*0.22; };
+      const hub=new THREE.Mesh(new THREE.IcosahedronGeometry(0.55,1),wire(V)); g.add(hub);
+      const core=new THREE.Mesh(new THREE.IcosahedronGeometry(0.22,0),solid(L)); g.add(core);
+      const nodes=[C,L,C,L].map((c,i,arr)=>{
+        const m=new THREE.Mesh(new THREE.BoxGeometry(0.26,0.26,0.26),solid(c)); g.add(m);
+        const geo=new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(new Float32Array(6),3));
+        g.add(new THREE.Line(geo,new THREE.LineBasicMaterial({color:D})));
+        return {m,geo,a:(i/arr.length)*Math.PI*2};
+      });
+      return t=>{ g.rotation.y=t*0.45; hub.rotation.y=-t*0.8; hub.rotation.x=t*0.4;
+        core.scale.setScalar(1+Math.sin(t*2.4)*0.16);
+        nodes.forEach(n=>{ const r=1.35+Math.sin(t*1.6+n.a)*0.16;
+          n.m.position.set(Math.cos(n.a)*r,Math.sin(n.a*1.5)*0.5,Math.sin(n.a)*r);
+          n.m.rotation.y=t; n.m.rotation.x=t*0.7;
+          const p=n.geo.attributes.position.array;
+          p[3]=n.m.position.x; p[4]=n.m.position.y; p[5]=n.m.position.z;
+          n.geo.attributes.position.needsUpdate=true; }); };
     }
   ];
 
@@ -2026,9 +2232,9 @@ mountViz('viz3',a=>{
   /* ============ phase data ============ */
   const RISK={ stage:'riskCanvas', gantt:'riskGantt', read:'riskRead', capPh:'riskCapPh', capDesc:'riskCapDesc', tag:'riskTag',
     phases:[
-      {n:'Foundations', k:'Lock first', pack:'Cross-cutting', col:'1 / 5', row:1,
-       cap:'<b>One boundary</b> &mdash; At Risk / Watchlist',
-       blurb:'High / Medium / Low / None collapses to two states: <strong>At Risk</strong> &mdash; over the line, act now &mdash; and <strong>Watchlist</strong> &mdash; approaching it. A rebrand of the output, not a new engine. The methodology view stays for the compliance crowd.',
+      {n:'Foundations &amp; MVP', k:'Already live', pack:'Cross-cutting', col:'1 / 5', row:1,
+       cap:'<b>Engine stood up</b> &mdash; MVP risk shipped',
+       blurb:'The <strong>Risk engine</strong> is stood up, and the MVP risk experiences are already live in the app: <strong>At Risk Reports</strong>, the at-risk list, and the two-state read &mdash; At Risk over the line, Watchlist approaching it. The foundation is in place; what follows gives those experiences real homes and one shared visual language.',
        chips:['At Risk / Watchlist','Methodology view','Passive &amp; opt-in','Premium, free window first']},
       {n:'Phase 1 · Risk Page', k:'Ships alone', pack:'Baseline + Premium', col:'2 / 6', row:2,
        cap:'A home that answers <b>&ldquo;how exposed are you?&rdquo;</b>',
@@ -2040,7 +2246,7 @@ mountViz('viz3',a=>{
        chips:['Omnibar &rarr; standard report','Analytics panel reframe','Inline indicators everywhere','Project-level roll-ups']},
       {scene:4, n:'Phase 3 · Risk Reports', k:'Assembly, not net-new', pack:'Premium', col:'6 / 11', row:4,
        cap:'Industry formats as <b>drop-in modules</b>',
-       blurb:'Meet customers where their conventions already are: stoplight, DCMA 14-point and Monte Carlo as chart-builder modules. They bottom out in the same building blocks &mdash; not-risky, semi, very &mdash; so once those are solid these are assembly rather than net-new modeling.',
+       blurb:'Meet customers where their conventions already are: <strong>stoplight charts</strong> first, then DCMA 14-point and Monte Carlo, all as chart-builder modules. They bottom out in the same building blocks &mdash; not-risky, semi, very &mdash; so once those are solid these are assembly rather than net-new modeling.',
        chips:['Stoplight','DCMA 14-point','Monte Carlo','Chart-builder modules']},
       {scene:3, n:'Phase 4 · Risk Lens', k:'Flagship', pack:'Premium', col:'8 / 13', row:5,
        cap:'A <b>lens</b> you drop over any surface',
