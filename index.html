@@ -223,8 +223,8 @@
     box-shadow:inset 0 0 30px -14px var(--violet-glow)}
   .lb-ic svg{width:44px;height:44px;stroke:var(--violet);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:opacity .4s}
   /* the shared WebGL layer paints only the ACTIVE tile; others keep a faint flat icon */
-  .gl-ready .lb-ic svg{opacity:.4}
-  .gl-ready .lb.is-active .lb-ic svg{opacity:0}
+  .gl-ready .lb-ic[data-mini] svg{opacity:.4}
+  .gl-ready .lb.is-active .lb-ic[data-mini] svg{opacity:0}
   .lb-kicker{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--violet-txt);margin-bottom:15px}
   .lb h3{font-family:var(--font-display);font-weight:700;font-size:clamp(24px,3.2vw,42px);line-height:1.02;letter-spacing:-.018em;margin-bottom:16px}
   .lb p{font-size:clamp(14.5px,1.35vw,17px);color:#D8D4E2;line-height:1.6;max-width:48ch}
@@ -475,7 +475,12 @@
   }
 
   /* ---------- "Who are these people" carousel specifics ---------- */
-  .ppl-av{font-family:var(--font-display);font-size:clamp(36px,4.6vw,54px);color:#e9dcff;line-height:1}
+  .lb-ic .ppl-av{width:clamp(54px,6.4vw,72px);height:auto;fill:none;stroke:var(--violet);stroke-width:1.7;
+    stroke-linecap:round;stroke-linejoin:round;opacity:1;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .lb-ic .ppl-av .soft{stroke:var(--corn);opacity:.5}
+  .lb-ic .ppl-av .ring{stroke:var(--corn);opacity:.34}
+  .lb-ic .ppl-av .ac{fill:#E9DCFF;stroke:none}
+  .lb.is-active .ppl-av{transform:scale(1.06)}
   .ppl-role{font-family:var(--font-mono);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--corn);margin:-6px 0 20px}
   .ppl-fields{display:flex;flex-direction:column;gap:16px}
   .ppl-field .ppl-lbl{display:block;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:5px}
@@ -843,8 +848,8 @@
 <section id="people" data-nav="The People">
   <span class="sec-label">04 · Who are these people</span>
   <div class="wrap">
-    <div class="eyebrow rv">Who are these people</div>
-    <h2 class="h-lg rv" style="margin-bottom:20px">Six people,<br>one <span class="grad">report-up problem.</span></h2>
+    <div class="eyebrow rv">Six people, one report-up problem</div>
+    <h2 class="h-lg rv" style="margin-bottom:20px">Who are <span class="grad">these people?</span></h2>
     <p class="lede rv" style="margin-bottom:6px;max-width:66ch">None of these are abstractions. Three own the outcome and three were deputized to report it up: the same problem seen from both ends of the arrow.</p>
 
     <div class="lb-carousel rv" id="pplCarousel">
@@ -853,7 +858,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">01</span>
-              <div class="lb-ic"><b class="ppl-av">P</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path class="soft" d="M6 31a18 18 0 0 1 36 0"/><path class="ring" d="M13 31a11 11 0 0 1 22 0"/><circle class="ac" cx="24" cy="31" r="3.6"/><path d="M24 23.5V13"/><path d="M18.5 17.5 24 12l5.5 5.5"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">Maj Gen · O-8 · SAF/SQ</div>
@@ -868,7 +873,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">02</span>
-              <div class="lb-ic"><b class="ppl-av">G</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 34a15 15 0 0 1 30 0"/><path class="ring" d="M16 34a8 8 0 0 1 16 0"/><path class="soft" d="M6 34h36"/><path class="soft" d="M24 34V17M14.5 34 23 18M33.5 34 25 18"/><circle class="ac" cx="24" cy="14.5" r="2.9"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">General · O-10 · DRPM Golden Dome</div>
@@ -883,7 +888,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">03</span>
-              <div class="lb-ic"><b class="ppl-av">D</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path class="soft" d="M9 34V22M16.5 34v-7M24 34V15M31.5 34V23M39 34v-6"/><path d="M6 34h36"/><path class="ring" d="M6 19.5h36"/><circle class="ac" cx="24" cy="19.5" r="3.2"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">Senior appointee · OSD A&amp;S</div>
@@ -898,7 +903,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">04</span>
-              <div class="lb-ic"><b class="ppl-av">Y</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path class="soft" d="M7 13c7.5 0 9 11 14 11M7 24h14M7 35c7.5 0 9-11 14-11"/><circle class="ac" cx="24" cy="24" r="3.6"/><path d="M27.6 24H40"/><path d="M35.5 19.5 40 24l-4.5 4.5"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">Deputized program owner · SSIO</div>
@@ -913,7 +918,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">05</span>
-              <div class="lb-ic"><b class="ppl-av">T</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path d="M8 17c8 0 8 14 16 14s8-14 16-14"/><path class="soft" d="M8 31c8 0 8-14 16-14s8 14 16 14"/><circle class="ac" cx="24" cy="24" r="3.2"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">Deputized technical owner · MDA</div>
@@ -928,7 +933,7 @@
           <article class="lb">
             <div class="lb-visual">
               <span class="lb-n">06</span>
-              <div class="lb-ic"><b class="ppl-av">A</b></div>
+              <div class="lb-ic"><svg class="ppl-av" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 36v-8h8v-8h8v-8h8"/><path class="ring" d="M8 36h32"/><circle class="ac" cx="17" cy="28" r="2.6"/><circle class="ac" cx="25" cy="20" r="2.6"/><circle class="ac" cx="33" cy="12" r="2.6"/></svg></div>
             </div>
             <div class="lb-body">
               <div class="lb-kicker">Major · O-4 · AATS</div>
